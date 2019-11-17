@@ -426,6 +426,11 @@ class OC_Image implements \OCP\IImage {
 		return $exif['Orientation'];
 	}
 
+	/**
+	 * @param String $data - binary string of data to process as the input image.
+	 *
+	 * @param $data
+	 */
 	public function readExif($data) {
 		if (!is_callable('exif_read_data')) {
 			$this->logger->debug('OC_Image->fixOrientation() Exif module not enabled.', array('app' => 'core'));
@@ -534,14 +539,23 @@ class OC_Image implements \OCP\IImage {
 	/**
 	 * Loads an image from a local file.
 	 *
-	 * @param bool|string $imagePath The path to a local file.
+	 * @param string $imagePath The path to a local file.
+	 * @param bool $exif_thumb_only Only return the EXIF thumbnail inside the file.
+	 *
 	 * @return bool|resource An image resource or false on error
 	 */
-	public function loadFromFile($imagePath = false) {
+	public function loadFromFile($imagePath = false, $exif_thumb_only = false) {
 		// exif_imagetype throws "read error!" if file is less than 12 byte
 		if (!@is_file($imagePath) || !file_exists($imagePath) || filesize($imagePath) < 12 || !is_readable($imagePath)) {
 			return false;
 		}
+
+		if($exif_thumb_only) {
+			if($exif_section = exif_read_data($imagePath, "THUMBNAIL")) {
+				$x=1;
+			}
+		}
+
 		$iType = exif_imagetype($imagePath);
 		switch ($iType) {
 			case IMAGETYPE_GIF:
@@ -866,8 +880,11 @@ class OC_Image implements \OCP\IImage {
 	}
 
 	/**
+	 * Resize current image resource and replace resource with the new image (in memory).
+	 *
 	 * @param int $width
 	 * @param int $height
+	 *
 	 * @return bool
 	 */
 	public function preciseResize(int $width, int $height): bool {

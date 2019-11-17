@@ -34,6 +34,7 @@ abstract class Image extends ProviderV2 {
 
 	/**
 	 * {@inheritDoc}
+	 * @todo what is this?!?!? why is it different to Generator.php ??
 	 */
 	public function getThumbnail(File $file, int $maxX, int $maxY): ?IImage {
 		$maxSizeForImages = \OC::$server->getConfig()->getSystemValue('preview_max_filesize_image', 50);

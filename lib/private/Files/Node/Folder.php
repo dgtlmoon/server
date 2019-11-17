@@ -169,6 +169,10 @@ class Folder extends Node implements \OCP\Files\Folder {
 	}
 
 	/**
+	 * Drops a new file into path
+	 *
+	 * @todo weird stuff, why is is asking for $path ?
+	 *
 	 * @param string $path
 	 * @return \OC\Files\Node\File
 	 * @throws \OCP\Files\NotPermittedException

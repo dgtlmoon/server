@@ -96,7 +96,7 @@ interface IPreview {
 	 * @throws \InvalidArgumentException if the preview would be invalid (in case the original image is invalid)
 	 * @since 11.0.0 - \InvalidArgumentException was added in 12.0.0
 	 */
-	public function getPreview(File $file, $width = -1, $height = -1, $crop = false, $mode = IPreview::MODE_FILL, $mimeType = null);
+	public function getPreview(File $file, $width = -1, $height = -1, $crop = false, $mode = IPreview::MODE_FILL, $mimeType = null, $imageGroup = null);
 
 	/**
 	 * Returns true if the passed mime type is supported

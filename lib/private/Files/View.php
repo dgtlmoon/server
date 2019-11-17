@@ -2163,6 +2163,8 @@ class View {
 	 * @return bool
 	 */
 	private function createParentDirectories($filePath) {
+		// Not sure why all this was done manually, just RTFM about mkdir.
+
 		$directoryParts = explode('/', $filePath);
 		$directoryParts = array_filter($directoryParts);
 		foreach ($directoryParts as $key => $part) {

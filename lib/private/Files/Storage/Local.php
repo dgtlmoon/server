@@ -195,6 +195,16 @@ class Local extends \OC\Files\Storage\Common {
 	}
 
 	public function touch($path, $mtime = null) {
+
+		$basedir = dirname($this->getSourcePath($path));
+		// @todo I had some problems where previewFolder was correct but did not exist.. is 0777 here correct?
+		// @todo is this the right way to deal with touch etc?
+		if (!is_dir($basedir)) {
+			if (!$result = mkdir($basedir, 0777, true)) {
+				return false;
+			}
+		}
+
 		// sets the modification time of the file to the given value.
 		// If mtime is nil the current time is set.
 		// note that the access time of the file always changes to the current time.
@@ -204,6 +214,7 @@ class Local extends \OC\Files\Storage\Common {
 		if (!is_null($mtime)) {
 			$result = @touch($this->getSourcePath($path), $mtime);
 		} else {
+
 			$result = @touch($this->getSourcePath($path));
 		}
 		if ($result) {

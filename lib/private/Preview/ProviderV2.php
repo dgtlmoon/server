@@ -84,7 +84,9 @@ abstract class ProviderV2 implements IProviderV2 {
 				$content = stream_get_contents($content, $maxSize);
 			}
 
+			// @WOHA you're joking right? always write??
 			file_put_contents($absPath, $content);
+
 			$this->tmpFiles[] = $absPath;
 			return $absPath;
 		} else {

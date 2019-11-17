@@ -124,7 +124,8 @@ class PreviewController extends Controller {
 		int $y = 32,
 		bool $a = false,
 		bool $forceIcon = true,
-		string $mode = 'fill') {
+		string $mode = 'fill',
+		string $imageGroup = '') {
 
 		if ($fileId === -1 || $x === 0 || $y === 0) {
 			return new DataResponse([], Http::STATUS_BAD_REQUEST);
@@ -139,7 +140,14 @@ class PreviewController extends Controller {
 
 		$node = array_pop($nodes);
 
-		return $this->fetchPreview($node, $x, $y, $a, $forceIcon, $mode);
+		// @todo we parse a DPI param into here to extend what we know
+		// @todo @dgtlmoon testing here..
+		if($imageGroup == 'thumbnail' || true) {
+			$x = 150;
+			$y = 150;
+		}
+
+		return $this->fetchPreview($node, $x, $y, $a, $forceIcon, $mode, strtolower(trim($imageGroup)));
 	}
 
 	/**
@@ -157,7 +165,8 @@ class PreviewController extends Controller {
 		int $y,
 		bool $a = false,
 		bool $forceIcon = true,
-		string $mode) : Http\Response {
+		string $mode,
+		string $imageGroup = '') : Http\Response {
 
 		if (!($node instanceof File) || (!$forceIcon && !$this->preview->isAvailable($node))) {
 			return new DataResponse([], Http::STATUS_NOT_FOUND);
@@ -167,7 +176,8 @@ class PreviewController extends Controller {
 		}
 
 		try {
-			$f = $this->preview->getPreview($node, $x, $y, !$a, $mode);
+			// @todo I don't see where the mimetype is set
+			$f = $this->preview->getPreview($node, $x, $y, !$a, $mode, 'image/jpeg', $imageGroup);
 			$response = new FileDisplayResponse($f, Http::STATUS_OK, ['Content-Type' => $f->getMimeType()]);
 			$response->cacheFor(3600 * 24);
 			return $response;

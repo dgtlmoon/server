@@ -53,7 +53,7 @@ class PreviewManager implements IPreview {
 
 	/** @var Generator */
 	private $generator;
-	
+
 	/** @var GeneratorHelper */
 	private $helper;
 
@@ -165,7 +165,7 @@ class PreviewManager implements IPreview {
 	 * @throws \InvalidArgumentException if the preview would be invalid (in case the original image is invalid)
 	 * @since 11.0.0 - \InvalidArgumentException was added in 12.0.0
 	 */
-	public function getPreview(File $file, $width = -1, $height = -1, $crop = false, $mode = IPreview::MODE_FILL, $mimeType = null) {
+	public function getPreview(File $file, $width = -1, $height = -1, $crop = false, $mode = IPreview::MODE_FILL, $mimeType = null, $imageGroup = '') {
 		if ($this->generator === null) {
 			$this->generator = new Generator(
 				$this->config,
@@ -179,7 +179,7 @@ class PreviewManager implements IPreview {
 			);
 		}
 
-		return $this->generator->getPreview($file, $width, $height, $crop, $mode, $mimeType);
+		return $this->generator->getPreview($file, $width, $height, $crop, $mode, $mimeType, $imageGroup);
 	}
 
 	/**
